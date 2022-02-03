@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from sqlalchemy import func, extract, and_
 
 from apis.models.vessel import Vessel
-from apis.models.model import db
 
 
 vessels_blueprint = Blueprint('vessels', __name__)
@@ -18,7 +17,7 @@ def insert_vessel():
 
         vessel = Vessel(vessel_code)
 
-        if vessel.findVessel(vessel_code):
+        if vessel.getVesselByCode(vessel_code):
             return jsonify(message="Vessel code {} already exists.".format(vessel_code)), 409
 
         result = vessel.saveVessel()

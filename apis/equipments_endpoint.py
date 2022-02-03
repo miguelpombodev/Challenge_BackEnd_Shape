@@ -1,4 +1,3 @@
-from email import message
 from flask import Blueprint, request, jsonify
 from sqlalchemy import func, extract, and_
 
@@ -17,10 +16,10 @@ def insert_equipment():
 
         equipment = Equipment(data)
 
-        if equipment.getEquipmentVessel(data['vessel_id']) is None:
+        if Vessel.getVesselByID(data['vessel_id']) is None:
             return jsonify(message='There is not vessel for such id'), 409
 
-        if equipment.getEquipmentByCode(data['code']) is not None:
+        if Equipment.getEquipmentByCode(data['code']) is not None:
             return jsonify(message='Equipment {} already exits'.format(data['code'])), 409
 
         result = equipment.saveEquipment()
