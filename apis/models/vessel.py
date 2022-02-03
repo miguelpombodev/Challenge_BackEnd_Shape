@@ -1,4 +1,5 @@
 from apis.models.model import db
+from flask import jsonify
 
 
 class Vessel(db.Model):
@@ -11,8 +12,12 @@ class Vessel(db.Model):
         self.code = vessel_code
 
     def saveVessel(self):
-        db.session.add(self)
-        db.session.commit()
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return jsonify(id=self.id, code=self.code)
+        except:
+            return jsonify(message='Internal error ocurred trying to save vessel')
 
     @classmethod
     def findVessel(cls, vessel_code):
