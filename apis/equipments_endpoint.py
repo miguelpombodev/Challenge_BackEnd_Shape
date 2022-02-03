@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from sqlalchemy import func, extract, and_
 
 from apis.models.equipment import equipment
-from apis.models.vessel import vessel
+from apis.models.vessel import Vessel
 from apis.models.model import db
 
 
@@ -42,7 +42,8 @@ def insert_equipment():
           409:
             description: returns NO_VESSEL if the vessel code is not already in the system
     """
-    return {'message':'OK'}, 201
+    return {'message': 'OK'}, 201
+
 
 @equipments_blueprint.route('/update_equipment_status', methods=['PUT'])
 def update_equipment_status():
@@ -63,7 +64,8 @@ def update_equipment_status():
           409:
             description: returns NO_CODE if the equipment code is not already in the system
     """
-    return {'message':'OK'}, 201
+    return {'message': 'OK'}, 201
+
 
 @equipments_blueprint.route('/active_equipments', methods=['GET'])
 def active_equipment():
@@ -84,5 +86,4 @@ def active_equipment():
           409:
             description: returns NO_VESSEL if the vessel is not already in the system
     """
-    return {'message':'OK'}, 200
-
+    return {'message': 'OK'}, 200
