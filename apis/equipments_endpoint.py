@@ -1,9 +1,8 @@
 from flask import Blueprint, request, jsonify
-from sqlalchemy import func, extract, and_
+from werkzeug.exceptions import BadRequestKeyError
 
 from apis.models.vessel import Vessel
 from apis.models.equipment import Equipment
-from apis.models.model import db
 
 
 equipments_blueprint = Blueprint('equipments', __name__)
@@ -57,4 +56,34 @@ def update_equipment_status():
 @equipments_blueprint.route('/active_equipments', methods=['GET'])
 def active_equipment():
 
-    return {'message': 'OK'}, 200
+    try:
+
+        data = request.args['vessel_code']
+
+        vessel = Vessel.getVesselByCode(data)
+
+        if vessel is None:
+            return jsonify(message='There is not a vessel for such code'), 409
+
+        equipmentsActive = Equipment.getActiveEquipments(vessel.code)
+
+        equipmentsArray = []
+
+        for equip in equipmentsActive:
+            equipSet = {
+                "id": equip.id,
+                "vessel_id": equip.vessel_id,
+                "name": equip.name,
+                "code": equip.code,
+                "location": equip.location,
+                "active": equip.active
+            }
+            equipmentsArray.append(equipSet)
+
+        result = {
+            vessel.code: equipmentsArray
+        }
+
+        return jsonify(result), 200
+    except BadRequestKeyError:
+        return jsonify(message="Parameter passed incorrectly")

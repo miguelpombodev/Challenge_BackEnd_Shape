@@ -1,5 +1,6 @@
 
 from apis.models.model import db
+from apis.models.vessel import Vessel
 from flask import jsonify
 
 
@@ -12,6 +13,9 @@ class Equipment(db.Model):
     code = db.Column(db.String(8), unique=True)
     location = db.Column(db.String(256))
     active = db.Column(db.Boolean)
+
+    vessels = db.relationship("Vessel", lazy='joined',
+                              backref=db.backref('owner', lazy='dynamic'))
 
     def __init__(self, data: dict):
         self.vessel_id = data['vessel_id'],
@@ -43,6 +47,13 @@ class Equipment(db.Model):
           Method update status of equipment to inactive (active = False)
         '''
         self.active = False
+
+    @classmethod
+    def getActiveEquipments(cls, vessel_code: int):
+        activeEquips = [hotel for hotel in cls.query.filter_by(
+            active=True).join(Vessel).filter_by(code=vessel_code).all()]
+
+        return activeEquips
 
     @classmethod
     def getEquipmentByCode(cls, code: int):
