@@ -86,4 +86,4 @@ def active_equipment():
 
         return jsonify(result), 200
     except BadRequestKeyError:
-        return jsonify(message="Parameter passed incorrectly")
+        return jsonify(message="Parameter passed incorrectly"), 400
