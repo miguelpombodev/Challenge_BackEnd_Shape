@@ -1,5 +1,4 @@
-from apis.models.equipment import Equipment
-from typing import Union
+
 from apis.models.model import db
 from flask import jsonify
 
@@ -21,7 +20,7 @@ class Equipment(db.Model):
         self.location = str(data['location']).capitalize(),
         self.active = True
 
-    def saveEquipment(self) -> Equipment:
+    def saveEquipment(self):
         '''
           Method saves the created instance of Equipment in database
         '''
@@ -39,23 +38,14 @@ class Equipment(db.Model):
         except:
             return jsonify(message='Internal error ocurred trying to save equipment')
 
-    # @classmethod
-    # def getEquipmentVessel(cls, vessel_id: int) -> Union[Equipment, None]:
-    #     '''
-    #       Method searches for a vessel which CODE is registered in database
-
-    #       If there is not such code, it returns None
-
-    #       PARAMETERS:
-    #         - vessel_code: string
-    #     '''
-    #     vessel_id = cls.query.filter_by(vessel_id=vessel_id).first()
-    #     if vessel_id:
-    #         return vessel_id
-    #     return None
+    def setInactiveEquipment(self):
+        '''
+          Method update status of equipment to inactive (active = False)
+        '''
+        self.active = False
 
     @classmethod
-    def getEquipmentByCode(cls, code: int) -> Union[Equipment, None]:
+    def getEquipmentByCode(cls, code: int):
         '''
           Method searches for a equipement code that is already registered in database
 

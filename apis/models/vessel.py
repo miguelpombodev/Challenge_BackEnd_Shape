@@ -1,6 +1,4 @@
-from apis.models.vessel import Vessel
 from apis.models.model import db
-from typing import Union
 from flask import jsonify
 
 
@@ -13,7 +11,7 @@ class Vessel(db.Model):
     def __init__(self, vessel_code: str):
         self.code = vessel_code
 
-    def saveVessel(self) -> Vessel:
+    def saveVessel(self):
         '''
           Method saves the created instance of Vessel in database
         '''
@@ -26,7 +24,7 @@ class Vessel(db.Model):
             return jsonify(message='Internal error ocurred trying to save vessel')
 
     @classmethod
-    def getVesselByCode(cls, vessel_code: str) -> Union[Vessel, None]:
+    def getVesselByCode(cls, vessel_code: str):
         '''
           Method searches for a vessel which CODE is registered in database
 
@@ -42,7 +40,7 @@ class Vessel(db.Model):
         return None
 
     @classmethod
-    def getVesselByID(cls, vessel_id: int) -> Union[Vessel, None]:
+    def getVesselByID(cls, vessel_id: int):
         '''
           Method searches for a vessel which ID is registered in database
 
