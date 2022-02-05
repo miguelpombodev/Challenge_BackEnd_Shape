@@ -9,6 +9,11 @@ from apis.equipments_endpoint import equipments_blueprint
 
 def create_app(app_name='VESSELS', test_config=False, production_conf=False):
     app = Flask(app_name)
+
+    app.config['SWAGGER'] = {
+        "title": "Challenge Shape Backend"
+    }
+
     swagger = Swagger(app)
     if test_config:
         app.config.from_object('config.TestConfig')

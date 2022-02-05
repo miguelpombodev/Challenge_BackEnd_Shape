@@ -1,6 +1,6 @@
 from sqlalchemy import func, or_
 from apis.models.equipment import Equipment
-from apis.models.vessel import vessel
+from apis.models.vessel import Vessel
 from apis.models.model import db
 from apis.app import create_app
 import pytest
@@ -18,8 +18,8 @@ def app():
     with app.app_context():
         db.create_all()
         Migrate(app, db)
-        vessel_obj1 = vessel(code='MV102')
-        vessel_obj2 = vessel(code='MV101')
+        vessel_obj1 = Vessel(code='MV102')
+        vessel_obj2 = Vessel(code='MV101')
         db.session.add(vessel_obj1)
         db.session.add(vessel_obj2)
         db.session.commit()
