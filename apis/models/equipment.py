@@ -49,7 +49,13 @@ class Equipment(db.Model):
         self.active = False
 
     @classmethod
-    def getActiveEquipments(cls, vessel_code: int):
+    def getActiveEquipments(cls, vessel_code: str):
+        '''
+          Method gets all equipments that have status active in database of passed vessel_code
+
+          PARAMETERS:
+            - vessel_code: string
+        '''
         activeEquips = [hotel for hotel in cls.query.filter_by(
             active=True).join(Vessel).filter_by(code=vessel_code).all()]
 

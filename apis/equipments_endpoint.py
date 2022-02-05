@@ -14,18 +14,18 @@ def insert_equipment():
         data = dict(request.json)
 
         if Vessel.getVesselByID(data['vessel_id']) is None:
-            return jsonify(message='There is not a vessel for such id'), 409
+            return jsonify(message='NO_VESSEL'), 409
 
         if Equipment.getEquipmentByCode(data['code']) is not None:
-            return jsonify(message='Equipment {} already exits'.format(data['code'])), 409
+            return jsonify(message='REPEATED_CODE'), 409
 
         equipment = Equipment(data)
 
-        result = equipment.saveEquipment()
+        equipment.saveEquipment()
 
-        return result, 201
+        return jsonify(message="OK"), 201
     except KeyError:
-        return jsonify(message="No valid argument passed"), 400
+        return jsonify(message="MISSING_PARAMETER"), 400
 
 
 @equipments_blueprint.route('/update_equipment_status', methods=['PUT'])
@@ -36,21 +36,19 @@ def update_equipment_status():
 
         equipmentsNormalize = [str(equip).upper()
                                for equip in data['code']]
-        result = []
 
         for equip in equipmentsNormalize:
             equipmentResult = Equipment.getEquipmentByCode(equip)
 
             if equipmentResult is None:
-                return jsonify(message="There is not an equipment for such id {}".format(equip)), 409
+                return jsonify(message="NO_CODE"), 409
 
             equipmentResult.setInactiveEquipment()
             equipmentResult.saveEquipment()
-            result.append(equip)
 
-        return jsonify(list=result), 201
+        return jsonify(message="OK"), 201
     except KeyError:
-        return jsonify(message="No valid argument passed"), 400
+        return jsonify(message="MISSING_PARAMETER"), 400
 
 
 @equipments_blueprint.route('/active_equipments', methods=['GET'])
@@ -63,7 +61,7 @@ def active_equipment():
         vessel = Vessel.getVesselByCode(data)
 
         if vessel is None:
-            return jsonify(message='There is not a vessel for such code'), 409
+            return jsonify(message='NO_VESSEL'), 409
 
         equipmentsActive = Equipment.getActiveEquipments(vessel.code)
 
@@ -86,4 +84,4 @@ def active_equipment():
 
         return jsonify(result), 200
     except BadRequestKeyError:
-        return jsonify(message="Parameter passed incorrectly"), 400
+        return jsonify(message="MISSING_PARAMETER"), 400

@@ -18,9 +18,10 @@ def insert_vessel():
         vessel = Vessel(vessel_code)
 
         if vessel.getVesselByCode(vessel_code):
-            return jsonify(message="Vessel code {} already exists.".format(vessel_code)), 409
+            return jsonify(message="FAIL"), 409
 
-        result = vessel.saveVessel()
-        return result, 201
+        vessel.saveVessel()
+
+        return jsonify(message="OK"), 201
     except KeyError:
-        return jsonify(message="No valid argument passed"), 400
+        return jsonify(message="MISSING_PARAMETER"), 400
